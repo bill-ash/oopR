@@ -1,0 +1,186 @@
+---
+title: "S3 inventory class"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Creating a small inventory class for QuickBooks
+
+I've written a small S3 class for creating an `nonInventoryObject` object that has an 
+`qb_add` method which generates some SQL to be added to QuickBooks desktop. 
+
+### My constructor looks like this: 
+
+```{r}
+
+qb_nonInventoryItem <- function(FullName = NULL, 
+                                RevAccount = NULL, 
+                                ExpAccount = NULL, 
+                                Cost = NULL, 
+                                Price = NULL, 
+                                Mfg = NULL, 
+                                MfgPart = NULL, 
+                                Description = NULL, 
+                                CustDesc = NULL, 
+                                Vendor = NULL, 
+                                ... ) {
+  item <- append(
+    list(
+      FullName = as.character(FullName),
+      RevAccount = as.character(RevAccount),
+      ExpAccount = as.character(ExpAccount),
+      Cost = as.double(Cost),
+      Price = as.double(Price),
+      Mfg = Mfg,
+      MfgPart = as.character(MfgPart),
+      Description = Description,
+      CustDesc = CustDesc,
+      Vendor = Vendor
+    ), list(...)
+  )
+  
+  item <- structure(item, class = 'qb_nonInventoryItem')
+  
+  return(item)
+}
+
+```
+
+
+### My generic: 
+
+```{r}
+
+qb_add <- function(x, verbose = TRUE, error_type = FALSE) {
+  UseMethod('qb_add')
+}
+
+# First define a helper function for making the SQL 
+.insert <- function(table = NULL,
+                    qb_object = NULL) {
+  if (is.null(table)) {
+    stop("Must choose a table to insert.", call. = FALSE)
+  }
+  
+  # remove NULL values 
+  qb_object <- purrr::compact(qb_object)
+  
+  values <- purrr::map_if(qb_object, is.character, ~paste0("'", gsub("'", "''", .x), "'"))
+  
+  values <- paste0(values, collapse = ", ")
+  
+  ins_names <- paste0(names(qb_object), collapse = ", ")
+  
+  stmt <- paste0('INSERT INTO ', table, ' (', ins_names, ') VALUES (', values, ')')
+  
+  return(stmt)
+}
+
+
+# Method for my nonInventoryItem
+qb_add.qb_nonInventoryItem <- function(.nonInventoryItem, 
+                                       verbose = TRUE, 
+                                       error_type = FALSE) {
+  
+  add_item <- .insert('NonInventoryItem', .nonInventoryItem)
+  
+  if (verbose == TRUE) {
+    print(add_item)
+  }
+  
+  # Leave these off for now
+  #qb_resp <- RODBC::sqlQuery(.qodbcR$qb_con, add_item, errors = error_type)
+  #list(error = return(qb_resp))
+}
+
+```
+
+
+
+## Testing it out 
+
+```{r}
+
+qb_add(
+  qb_nonInventoryItem(FullName = 'ScrewDriver', 
+                      RevAccount = '40100', 
+                      ExpAccount = '50100', 
+                      Cost = 10.21, 
+                      Price = 20.99, 
+                      Mfg = 'Amazon', 
+                      MfgPart = 'xx-1213-pp', 
+                      Description = 'Normal screw drive', 
+                      CustDesc = 'World\'s best screw driver!!1111', 
+                      Vendor = 'BestBuy'
+  ), verbose = TRUE)
+
+```
+
+## Add many items 
+
+This is the part that I'm struggling with. This works but feels more like a hack 
+then what it should/ could be. 
+
+```{r}
+
+test_data <- tibble::tibble(
+  FullName = paste0('Product ', 1:10),
+  RevAccount = '40100', 
+  ExpAccount = '50100', 
+  Cost = round(runif(10, .50, 100), 2), 
+  Price = round(Cost * 1.5, 2),
+  Mfg = paste0('Mfg ', 1:10),
+  MfgPart = paste0(sample(letters, 10), '-xxxx'),
+  Description = 'Some Description', 
+  CustDesc = 'Customer Description', 
+  Vendor = 'Vendor'
+)
+
+z <- purrr::map(
+  dplyr::group_split(test_data, FullName), function(test_data) {
+    
+  test_Items <- qb_nonInventoryItem(
+    test_data$FullName, 
+    test_data$RevAccount, 
+    test_data$ExpAccount, 
+    test_data$Cost, 
+    test_data$Price, 
+    test_data$Mfg, 
+    test_data$MfgPart, 
+    test_data$Description, 
+    test_data$CustDesc, 
+    test_data$Vendor
+  )
+  
+})
+
+purrr::map(z, ~qb_add(., verbose = TRUE))
+
+```
+
+
+I think what I really want to do is iterate across each element in my list 
+by it's index. 
+
+```{r}
+zz <- data.frame(arg1 = 1:3, 
+                 arg2 = c('first', 'second', 'third'), 
+                 arg3 = c(100.12, 32.12, 12.30))
+
+for (i in 1:nrow(zz)) {
+  print(paste0(names(zz), ' = ', zz[i,]))
+}
+
+zz <- list(arg1 = 1:3, 
+           arg2 = c('first', 'second', 'third'), 
+           arg3 = c(100.12, 32.12, 12.30))
+
+for (i in seq_along(zz)) {
+  pp <- as.data.frame(zz)
+  print(paste0(names(pp), ' = ', pp[i,]))
+}
+
+```
