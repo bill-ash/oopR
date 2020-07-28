@@ -9,8 +9,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Creating a small inventory class for QuickBooks
 
-I've written a small S3 class for creating an `nonInventoryObject` object that has an 
-`qb_add` method which generates some SQL to be added to QuickBooks desktop. 
+I've written a small S3 class for creating a `qb_nonInventoryItem` object that has a
+`qb_add` method which generates some SQL to create new items in QuickBooks. 
 
 ### My constructor looks like this: 
 
@@ -50,7 +50,7 @@ qb_nonInventoryItem <- function(FullName = NULL,
 ```
 
 
-### My generic: 
+### My generic and helper function: 
 
 ```{r}
 
@@ -121,11 +121,10 @@ qb_add(
 
 ## Add many items 
 
-This is the part that I'm struggling with. This works but feels more like a hack 
-then what it should/ could be. 
+This is the part that I'm struggling with. This works but feels more like a hack. 
 
 ```{r}
-
+# Some data source 
 test_data <- tibble::tibble(
   FullName = paste0('Product ', 1:10),
   RevAccount = '40100', 
@@ -139,30 +138,30 @@ test_data <- tibble::tibble(
   Vendor = 'Vendor'
 )
 
-z <- purrr::map(
-  dplyr::group_split(test_data, FullName), function(test_data) {
+zz <- lapply(
+  dplyr::group_split(test_data, FullName), function(x) {
+    test_Items <- qb_nonInventoryItem(
+      x$FullName, 
+      x$RevAccount, 
+      x$ExpAccount, 
+      x$Cost, 
+      x$Price, 
+      x$Mfg, 
+      x$MfgPart, 
+      x$Description, 
+      x$CustDesc, 
+      x$Vendor
+    )
     
-  test_Items <- qb_nonInventoryItem(
-    test_data$FullName, 
-    test_data$RevAccount, 
-    test_data$ExpAccount, 
-    test_data$Cost, 
-    test_data$Price, 
-    test_data$Mfg, 
-    test_data$MfgPart, 
-    test_data$Description, 
-    test_data$CustDesc, 
-    test_data$Vendor
-  )
-  
-})
+  })
 
-purrr::map(z, ~qb_add(., verbose = TRUE))
+lapply(zz, qb_add)
 
 ```
 
+## Possible solution 
 
-I think what I really want to do is iterate across each element in my list 
+I think what I really want is to iterate across each element in my list 
 by it's index. 
 
 ```{r}
