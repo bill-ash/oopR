@@ -9,8 +9,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Creating a small inventory class for QuickBooks
 
-I've written a small S3 class for creating a `qb_nonInventoryItem` object that has a
-`qb_add` method which generates some SQL to create new items in QuickBooks. 
+I've written a small S3 class for creating `qb_nonInventoryItem` objects. The 
+`qb_add` generic generates some SQL to create new items in QuickBooks. 
 
 ### My constructor looks like this: 
 
@@ -54,7 +54,9 @@ qb_nonInventoryItem <- function(FullName = NULL,
 
 ```{r}
 
-qb_add <- function(x, verbose = TRUE, error_type = FALSE) {
+qb_add <- function(x, 
+                   verbose = TRUE, 
+                   error_type = FALSE) {
   UseMethod('qb_add')
 }
 
@@ -162,23 +164,23 @@ lapply(zz, qb_add)
 ## Possible solution 
 
 I think what I really want is to iterate across each element in my list 
-by it's index. 
+by it's index?
 
 ```{r}
-zz <- data.frame(arg1 = 1:3, 
+zd <- data.frame(arg1 = 1:3, 
                  arg2 = c('first', 'second', 'third'), 
                  arg3 = c(100.12, 32.12, 12.30))
 
-for (i in 1:nrow(zz)) {
-  print(paste0(names(zz), ' = ', zz[i,]))
+for (i in 1:nrow(zd)) {
+  print(paste0(names(zd), ' = ', zd[i,]))
 }
 
-zz <- list(arg1 = 1:3, 
+zl <- list(arg1 = 1:3, 
            arg2 = c('first', 'second', 'third'), 
            arg3 = c(100.12, 32.12, 12.30))
 
-for (i in seq_along(zz)) {
-  pp <- as.data.frame(zz)
+for (i in seq_along(zl)) {
+  pp <- as.data.frame(zl)
   print(paste0(names(pp), ' = ', pp[i,]))
 }
 

@@ -381,7 +381,7 @@ summary {
 
 <div id="creating-a-small-inventory-class-for-quickbooks" class="section level2">
 <h2>Creating a small inventory class for QuickBooks</h2>
-<p>I’ve written a small S3 class for creating a <code>qb_nonInventoryItem</code> object that has a <code>qb_add</code> method which generates some SQL to create new items in QuickBooks.</p>
+<p>I’ve written a small S3 class for creating <code>qb_nonInventoryItem</code> objects. The <code>qb_add</code> generic generates some SQL to create new items in QuickBooks.</p>
 <div id="my-constructor-looks-like-this" class="section level3">
 <h3>My constructor looks like this:</h3>
 <pre class="r"><code>qb_nonInventoryItem &lt;- function(FullName = NULL, 
@@ -417,7 +417,9 @@ summary {
 </div>
 <div id="my-generic-and-helper-function" class="section level3">
 <h3>My generic and helper function:</h3>
-<pre class="r"><code>qb_add &lt;- function(x, verbose = TRUE, error_type = FALSE) {
+<pre class="r"><code>qb_add &lt;- function(x, 
+                   verbose = TRUE, 
+                   error_type = FALSE) {
   UseMethod(&#39;qb_add&#39;)
 }
 
@@ -511,65 +513,65 @@ zz &lt;- lapply(
   })
 
 lapply(zz, qb_add)</code></pre>
-<pre><code>## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 1&#39;, &#39;40100&#39;, &#39;50100&#39;, 85.49, 128.23, &#39;Mfg 1&#39;, &#39;x-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 10&#39;, &#39;40100&#39;, &#39;50100&#39;, 17.56, 26.34, &#39;Mfg 10&#39;, &#39;b-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 2&#39;, &#39;40100&#39;, &#39;50100&#39;, 40.54, 60.81, &#39;Mfg 2&#39;, &#39;h-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 3&#39;, &#39;40100&#39;, &#39;50100&#39;, 91.73, 137.6, &#39;Mfg 3&#39;, &#39;y-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 4&#39;, &#39;40100&#39;, &#39;50100&#39;, 75.19, 112.78, &#39;Mfg 4&#39;, &#39;t-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 5&#39;, &#39;40100&#39;, &#39;50100&#39;, 57.47, 86.2, &#39;Mfg 5&#39;, &#39;g-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 6&#39;, &#39;40100&#39;, &#39;50100&#39;, 3.92, 5.88, &#39;Mfg 6&#39;, &#39;f-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 7&#39;, &#39;40100&#39;, &#39;50100&#39;, 87.63, 131.44, &#39;Mfg 7&#39;, &#39;n-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 8&#39;, &#39;40100&#39;, &#39;50100&#39;, 48.41, 72.61, &#39;Mfg 8&#39;, &#39;l-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 9&#39;, &#39;40100&#39;, &#39;50100&#39;, 3.19, 4.78, &#39;Mfg 9&#39;, &#39;s-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;</code></pre>
+<pre><code>## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 1&#39;, &#39;40100&#39;, &#39;50100&#39;, 70.99, 106.48, &#39;Mfg 1&#39;, &#39;o-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 10&#39;, &#39;40100&#39;, &#39;50100&#39;, 14.85, 22.27, &#39;Mfg 10&#39;, &#39;e-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 2&#39;, &#39;40100&#39;, &#39;50100&#39;, 77.36, 116.04, &#39;Mfg 2&#39;, &#39;m-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 3&#39;, &#39;40100&#39;, &#39;50100&#39;, 5.75, 8.62, &#39;Mfg 3&#39;, &#39;g-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 4&#39;, &#39;40100&#39;, &#39;50100&#39;, 43.66, 65.49, &#39;Mfg 4&#39;, &#39;h-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 5&#39;, &#39;40100&#39;, &#39;50100&#39;, 90.95, 136.43, &#39;Mfg 5&#39;, &#39;b-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 6&#39;, &#39;40100&#39;, &#39;50100&#39;, 91.62, 137.43, &#39;Mfg 6&#39;, &#39;i-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 7&#39;, &#39;40100&#39;, &#39;50100&#39;, 79.44, 119.16, &#39;Mfg 7&#39;, &#39;d-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 8&#39;, &#39;40100&#39;, &#39;50100&#39;, 49.8, 74.7, &#39;Mfg 8&#39;, &#39;f-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 9&#39;, &#39;40100&#39;, &#39;50100&#39;, 87.58, 131.37, &#39;Mfg 9&#39;, &#39;x-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;</code></pre>
 <pre><code>## [[1]]
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 1&#39;, &#39;40100&#39;, &#39;50100&#39;, 85.49, 128.23, &#39;Mfg 1&#39;, &#39;x-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 1&#39;, &#39;40100&#39;, &#39;50100&#39;, 70.99, 106.48, &#39;Mfg 1&#39;, &#39;o-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
 ## 
 ## [[2]]
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 10&#39;, &#39;40100&#39;, &#39;50100&#39;, 17.56, 26.34, &#39;Mfg 10&#39;, &#39;b-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 10&#39;, &#39;40100&#39;, &#39;50100&#39;, 14.85, 22.27, &#39;Mfg 10&#39;, &#39;e-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
 ## 
 ## [[3]]
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 2&#39;, &#39;40100&#39;, &#39;50100&#39;, 40.54, 60.81, &#39;Mfg 2&#39;, &#39;h-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 2&#39;, &#39;40100&#39;, &#39;50100&#39;, 77.36, 116.04, &#39;Mfg 2&#39;, &#39;m-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
 ## 
 ## [[4]]
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 3&#39;, &#39;40100&#39;, &#39;50100&#39;, 91.73, 137.6, &#39;Mfg 3&#39;, &#39;y-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 3&#39;, &#39;40100&#39;, &#39;50100&#39;, 5.75, 8.62, &#39;Mfg 3&#39;, &#39;g-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
 ## 
 ## [[5]]
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 4&#39;, &#39;40100&#39;, &#39;50100&#39;, 75.19, 112.78, &#39;Mfg 4&#39;, &#39;t-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 4&#39;, &#39;40100&#39;, &#39;50100&#39;, 43.66, 65.49, &#39;Mfg 4&#39;, &#39;h-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
 ## 
 ## [[6]]
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 5&#39;, &#39;40100&#39;, &#39;50100&#39;, 57.47, 86.2, &#39;Mfg 5&#39;, &#39;g-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 5&#39;, &#39;40100&#39;, &#39;50100&#39;, 90.95, 136.43, &#39;Mfg 5&#39;, &#39;b-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
 ## 
 ## [[7]]
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 6&#39;, &#39;40100&#39;, &#39;50100&#39;, 3.92, 5.88, &#39;Mfg 6&#39;, &#39;f-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 6&#39;, &#39;40100&#39;, &#39;50100&#39;, 91.62, 137.43, &#39;Mfg 6&#39;, &#39;i-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
 ## 
 ## [[8]]
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 7&#39;, &#39;40100&#39;, &#39;50100&#39;, 87.63, 131.44, &#39;Mfg 7&#39;, &#39;n-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 7&#39;, &#39;40100&#39;, &#39;50100&#39;, 79.44, 119.16, &#39;Mfg 7&#39;, &#39;d-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
 ## 
 ## [[9]]
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 8&#39;, &#39;40100&#39;, &#39;50100&#39;, 48.41, 72.61, &#39;Mfg 8&#39;, &#39;l-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 8&#39;, &#39;40100&#39;, &#39;50100&#39;, 49.8, 74.7, &#39;Mfg 8&#39;, &#39;f-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;
 ## 
 ## [[10]]
-## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 9&#39;, &#39;40100&#39;, &#39;50100&#39;, 3.19, 4.78, &#39;Mfg 9&#39;, &#39;s-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;</code></pre>
+## [1] &quot;INSERT INTO NonInventoryItem (FullName, RevAccount, ExpAccount, Cost, Price, Mfg, MfgPart, Description, CustDesc, Vendor) VALUES (&#39;Product 9&#39;, &#39;40100&#39;, &#39;50100&#39;, 87.58, 131.37, &#39;Mfg 9&#39;, &#39;x-xxxx&#39;, &#39;Some Description&#39;, &#39;Customer Description&#39;, &#39;Vendor&#39;)&quot;</code></pre>
 </div>
 <div id="possible-solution" class="section level2">
 <h2>Possible solution</h2>
-<p>I think what I really want is to iterate across each element in my list by it’s index.</p>
-<pre class="r"><code>zz &lt;- data.frame(arg1 = 1:3, 
+<p>I think what I really want is to iterate across each element in my list by it’s index?</p>
+<pre class="r"><code>zd &lt;- data.frame(arg1 = 1:3, 
                  arg2 = c(&#39;first&#39;, &#39;second&#39;, &#39;third&#39;), 
                  arg3 = c(100.12, 32.12, 12.30))
 
-for (i in 1:nrow(zz)) {
-  print(paste0(names(zz), &#39; = &#39;, zz[i,]))
+for (i in 1:nrow(zd)) {
+  print(paste0(names(zd), &#39; = &#39;, zd[i,]))
 }</code></pre>
 <pre><code>## [1] &quot;arg1 = 1&quot;      &quot;arg2 = first&quot;  &quot;arg3 = 100.12&quot;
 ## [1] &quot;arg1 = 2&quot;      &quot;arg2 = second&quot; &quot;arg3 = 32.12&quot; 
 ## [1] &quot;arg1 = 3&quot;     &quot;arg2 = third&quot; &quot;arg3 = 12.3&quot;</code></pre>
-<pre class="r"><code>zz &lt;- list(arg1 = 1:3, 
+<pre class="r"><code>zl &lt;- list(arg1 = 1:3, 
            arg2 = c(&#39;first&#39;, &#39;second&#39;, &#39;third&#39;), 
            arg3 = c(100.12, 32.12, 12.30))
 
-for (i in seq_along(zz)) {
-  pp &lt;- as.data.frame(zz)
+for (i in seq_along(zl)) {
+  pp &lt;- as.data.frame(zl)
   print(paste0(names(pp), &#39; = &#39;, pp[i,]))
 }</code></pre>
 <pre><code>## [1] &quot;arg1 = 1&quot;      &quot;arg2 = first&quot;  &quot;arg3 = 100.12&quot;
